@@ -1,0 +1,209 @@
+.tour-header{
+    background-image:
+    linear-gradient(to bottom, transparent 80%, var(--soft-grey) 100%),
+    url("../images/asakusa.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 600px;
+}
+
+.informations-reservation{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 300px;
+}
+
+.informations{
+    margin-left: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.informations h1{
+    font-size: 38px;
+}
+.city, .people{
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    font-weight: bold;
+    font-size: 18px;
+}
+.city-icon, .people-icon{
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+.city-icon img, .people-icon img{
+    width: 40px;
+    height: 40px;
+}
+.city-icon{
+    background-color: var(--blue-4);
+}
+.people-icon{
+    background-color: var(--blue-3);
+}
+
+.reservation{
+    width: 30%;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--grey);
+    background-color: var(--white);
+    border-radius: 15px;
+    margin-right: 20px;
+}
+.unit-price{
+    margin-top: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+.unit-price .little{
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.reservation-bar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--grey);
+    background-color: var(--soft-grey);
+    border-radius: 5px;
+    margin: 10px;
+}
+.date{
+    position: relative;
+    width: 65%;
+}
+.guest{
+    position: relative;
+    width: 35%;
+}
+.reservation-bar input{
+    width: calc(100% - 16px);
+    height: 30px;
+    padding-top: 20px;
+    padding-left: 16px;
+    font-size: 12px;
+    color: var(--black);
+    opacity: 0.5;
+    border: 0px;
+    background: transparent;
+    cursor: pointer;
+}
+.reservation-bar input::placeholder {
+    color: var(--black);
+}
+.reservation-bar input:focus{
+    border: none;
+    outline: none;
+}
+.date label, .guest label{
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    color: var(--black);
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+    background: transparent;
+    padding: 0 4px;
+    font-weight: bold;
+}
+.reservation-bar hr{
+    width: 2px;
+    height: 30px;
+    background-color: var(--grey);
+    border: none;
+}
+
+.total-price{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.price-label{
+    margin-left: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+.calculated-price{
+    font-size: 18px;
+    font-weight: normal;
+    margin-right: 20px;
+}
+.reservation button{
+    margin-left: auto;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    margin-top: 25px;
+    width: 125px;
+    height: 50px;
+    color: var(--white);
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    background-color: var(--blue-4);
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.description-warning{
+    margin-top: 50px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    background-image:
+    linear-gradient(to bottom, var(--soft-grey) 0%, var(--white) 10%, var(--white) 100%);
+}
+
+.description{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+.description h3{
+    font-size: 24px;
+}
+.description p{
+    font-style: italic;
+    font-size: 20px;
+    margin-right: 20%;
+}
+
+.warning{
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.warning img{
+    width: 30%;
+    height: auto;
+}
+.warning p{
+    text-align: center;
+    font-size: 20px;
+    margin-right: 10%;
+}

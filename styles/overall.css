@@ -42,5 +42,7 @@ body{
     margin: 0;
     font-family: 'Arimo';
     color: var(--black);
+    background-color: var(--soft-grey);
 }
+
 
