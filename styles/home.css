@@ -1,0 +1,163 @@
+body{
+    background-color: var(--soft-grey);
+}
+.home-header{
+    background-image:
+    linear-gradient(to bottom, transparent 80%, var(--soft-grey) 100%),
+    linear-gradient(to right, black 0%, transparent 10%),
+    linear-gradient(to left, black 0%, transparent 10%),
+    url("../images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 20%;
+    height: 500px;
+    color: var(--white);
+}
+
+.home-header h1{
+    font-weight: bold;
+    margin: 0;
+    font-size: 36px;
+    padding-top: 20px;
+}
+.home-header p{
+    font-size: 20px;
+}
+
+.home-header h1, .home-header p{
+    margin-left: 30%;
+    margin-right: 40%;
+}
+
+.city-tours{
+    margin-top: 20px;
+    margin-left: 30%;
+    margin-right: 30%;
+    overflow: hidden;
+}
+.city-tours-cards-track{
+    display: flex;
+    transition: transform 0.5s ease;
+}
+.city-tours-cards-set{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+.city-tours a{
+    color: var(--black);
+    text-decoration: none;
+    width: 32%;
+}
+.city-tour-card{
+    width: 100%;
+    background-color: var(--white);
+    border-radius: 10px;
+    padding-bottom: 10px;
+}
+.city-tour-card img{
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.city-tour-card h3{
+    font-size: 16px;
+    padding-left: 5px;
+    height: 48px;
+    align-items: center;
+}
+.city-tour-card .city{
+    padding-left: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.city-tour-card .city .city-icon{
+    height: 30px;
+    width: 30px;
+    background-color: var(--blue-3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.city-tour-card .city .city-icon img{
+    height: 20px;
+    width: 20px;
+}
+.city-tour-card .price{
+    width: 60%;
+    height: 40px;
+    background-color: var(--blue-4);
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: 5px;
+    margin-top: 20px;
+}
+
+.cards-nav{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: end;
+    margin-top: 10px;
+}
+.cards-nav button{
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--blue-1);
+    border: none;
+    cursor: pointer;
+    background-color: var(--blue-3);
+}
+.cards-nav button img{
+    height: 20px;
+    width: 20px;
+}
+.cards-nav button:disabled{
+    background-color: var(--blue-1);
+    cursor: not-allowed;
+}
+.cards-nav .indicator{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.informations{
+    height: 400px;
+    background-image:
+    linear-gradient(to top, var(--white) 0%, var(--soft-grey) 98%);
+    display: flex;
+    flex-direction: row;
+    padding-left: 30%;
+    padding-right: 30%;
+    align-items: center;
+    width: 40%;
+    justify-content: space-between;
+}
+.information{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+.information img{
+    width: 100%;
+}
