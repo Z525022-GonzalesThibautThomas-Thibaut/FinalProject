@@ -162,7 +162,7 @@ input[type=number] {
     width: 2px;
     height: 80%;
     background-color: var(--grey);
-    border: none;          /* supprime la bordure par défaut */
+    border: none;
 }
 
 .user-options{
@@ -216,3 +216,73 @@ input[type=number] {
     width: 20px;
 }
 /*End of Navbar overall style*/
+
+@media (max-width: 980px) {
+    .log-in{
+        font-size: 0px;
+        padding: 0;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: none;
+    }
+    .log-in img{
+        padding-right: 0px;
+    }
+}
+@media (max-width: 740px) {
+    .select-city {
+        width: 50%;
+    }
+    .select-date, .select-guest{
+        width: 25%;
+    }
+    .navbar-logo{
+        display: none;
+    }
+    .navbar{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--white);
+    }
+    .navbar-search-bar{
+        margin-left: 10px;
+        width: 100%;
+    }
+    .navbar-search-bar button
+    {
+        height: 30px;
+        width: 30px;
+        margin: 0px;
+    }
+    .navbar-search-bar button img
+    {
+        height: 20px;
+        width: 20px;
+    }
+    .select-city label, .select-date label, .select-guest label{
+        top: 24px;
+        font-size: 12px;
+    }
+    .navbar input{
+        font-size: 8px;
+    }
+    .select-city select {
+        font-size: 8px;
+    }
+    .dropdown-menu button{
+        margin-right: 10px;
+    }
+}
+@media (max-width: 400px){
+    .select-city {
+        width: 34%;
+    }
+    .select-date, .select-guest{
+        width: 33%;
+    }
+}

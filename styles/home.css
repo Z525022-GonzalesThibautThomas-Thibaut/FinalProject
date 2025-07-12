@@ -157,7 +157,68 @@ body{
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    font-weight: bold;
 }
 .information img{
     width: 100%;
 }
+
+
+@media (max-width: 1200px) {
+    .home-header h1, .home-header p{
+        margin-left: 5%;
+        margin-right: 50%;
+    }
+    .city-tours{
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+    .informations{
+        padding-left: 5%;
+        padding-right: 5%;
+        width: 90%;
+    }
+}
+@media (max-width: 750px){
+    .home-header h1, .home-header p{
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+@media (max-width: 570px){
+    .home-header{
+        background-image:
+        linear-gradient(to bottom, transparent 80%, var(--soft-grey) 100%),
+        linear-gradient(to right, black 0%, transparent 10%),
+        linear-gradient(to left, black 0%, transparent 10%),
+        url("../images/background.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50% 70%;
+        height: 250px;
+        color: var(--white);
+    }
+    .home-header h1, .home-header p{
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+    .city-tour-card img{
+        height: 100px;
+    }
+    .city-tour-card .price{
+        width: 96%;
+        margin-right: 2%;
+        margin-left: 2%;
+        margin-top: 10px;
+    }
+    .city-tour-card h3{
+        font-size: 12px;
+    }
+    .city-tour-card .city{
+        font-size: 12px;
+    }
+    .informations{
+        height: 250px;
+    }
+}
+
