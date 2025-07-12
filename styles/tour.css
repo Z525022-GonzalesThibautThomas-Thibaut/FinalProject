@@ -207,3 +207,49 @@
     font-size: 20px;
     margin-right: 10%;
 }
+
+@media (max-width: 1000px) {
+    .reservation{
+        width: 40%;
+    }
+}
+@media (max-width: 700px){
+    .tour-header{
+        height: 400px;
+    }
+    .informations-reservation{
+        flex-direction: column;
+        justify-content:start;
+        align-items:normal;
+        height: auto;
+    }
+    .city, .people{
+        margin-bottom: 20px;
+    }
+    .reservation{
+        width: calc(100% - 40px);
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+    .description-warning{
+        flex-direction: column;
+    }
+    .description{
+        width: 100%;
+    }
+    .description p{
+        margin-right: 20px;
+    }
+    .warning{
+        width: 100%;
+    }
+    .warning img{
+        width: 30%;
+        height: auto;
+    }
+    .warning p{
+        text-align: center;
+        font-size: 20px;
+        margin-right: 10%;
+    }
+}
