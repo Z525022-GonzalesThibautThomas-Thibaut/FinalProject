@@ -1,0 +1,85 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../images/background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+img{
+    max-width: 200px;
+}
+
+.register{
+    margin: 40px;
+    background-color: var(--white);
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--grey);
+    border-radius: 15px;
+    padding: 20px;
+    
+}
+.before h1{
+    margin: 0;
+    font-size: 28px;
+    text-align: start;
+}
+.before hr{
+    height: 1px;
+    background-color: var(--blue-4);
+}
+.before{
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+.before a{
+    color: var(--blue-4);
+}
+
+.email, .firstname, .lastname, .username, .password, .confirm-password{
+    display: flex;
+    flex-direction: column;
+}
+.register label{
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.register input{
+    height: 30px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--grey);
+    background-color: var(--soft-grey);
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.name{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+.register button{
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    color: var(--white);
+    background-color: var(--blue-4);
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+@media (max-width: 450px) {
+    .name{
+        flex-direction: column;
+        gap: 0px;
+    }
+    .register input{
+        width: 250px;
+    }
+}

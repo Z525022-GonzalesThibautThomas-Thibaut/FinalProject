@@ -33,16 +33,15 @@
 }
 /*End of Fonts*/
 
-html{
-    padding: 0;
-    margin: 0;
-}
 body{
-    padding: 0;
-    margin: 0;
     font-family: 'Arimo';
     color: var(--black);
     background-color: var(--soft-grey);
+}
+html, body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 
