@@ -1,0 +1,132 @@
+<?php 
+    session_start();
+    require_once('database.php');
+    $user_id = $_SESSION['user_id'];
+    $statement = $db->prepare("SELECT balance FROM user WHERE user_id = ?");
+    $statement->execute([$user_id]);
+    $user = $statement->fetch(PDO::FETCH_ASSOC);
+    $balance = $user['balance'];
+
+    if($_SERVER["REQUEST_METHOD"]==="POST" && isset($_POST['amount'])){
+        $amount = (int)$_POST['amount'];
+        $statement = $db->prepare("UPDATE user SET balance = balance + ? WHERE user_id = ?");
+        $statement->execute([$amount,$user_id]);
+
+        $statement = $db->prepare("SELECT balance FROM user WHERE user_id = ?");
+        $statement->execute([$user_id]);
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $balance = $user['balance'];
+    }
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="icons/logo.png">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="styles/overall.css">
+        <link rel="stylesheet" href="styles/footer.css">
+        <link rel="stylesheet" href="styles/navbar.css">
+        <link rel="stylesheet" href="styles/wallet.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
+        <script src="scripts/overall.js" defer></script>
+        <title>JapanTour</title>
+    </head>
+    <body>
+        <nav class="navbar">
+            <a class="navbar-logo" href="index.php">
+                <img src="icons/logo.png" alt="Logo de JapanTour">
+            </a>
+            
+            <form class="navbar-search-bar" action="#" method="get">
+                <div class="select-city">
+                    <label for="city">City</label>
+                    <select name="city" id="city">
+                    <option value="" disabled selected hidden>Choose your city to explore...</option>
+                    <option value="tokyo">Tokyo</option>
+                    <option value="osaka">Osaka</option>
+                    <option value="kyoto">Kyoto</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="select-date">
+                    <label for="date">Date</label>
+                    <input type="text" id="date" name="date" placeholder="When?">
+                </div>
+                <hr>
+                <div class="select-guest">
+                    <label for="guests">Guests</label>
+                    <input type="number" name="guests" id="guests" min="1" placeholder="Who?">
+                </div>
+              
+                <button type="submit"><img src="icons/magnifying-glass-svgrepo-com.png" alt="Search icon"></button>
+            </form>
+            <div class="user-options">
+                <?php if(isset($_SESSION['user_id'])):?>
+                    <div class="log-in">
+                        <img src="icons/user.png" alt="User icon">
+                        <?php echo $_SESSION['username'];?>
+                    </div>
+                    <div class="dropdown-menu">
+                        <button id="dropdown-button"><img src="icons/menu.png" alt="Menu icon"></button>
+                        <div id="dropdown-content" class="dropdown-content">
+                        <a href="logout.php">Log out</a>
+                        <a href="reservations.php">My reservations</a>
+                        <a href="wallet.php">My wallet</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="login.php">
+                        <div class="log-in">
+                            <img src="icons/user.png" alt="User icon">
+                            Log in
+                        </div>
+                    </a>
+                <?php endif; ?>
+            </div>
+        </nav>
+
+        <main>
+            <div class="info-wallet">
+                <div class="wallet">
+                    <h2>Wallet</h2>
+                    <hr>
+                    <span class="money">¥<?php echo number_format($balance,0,'',' ');?></span>
+                </div>
+                <img src="icons/yen.png">
+            </div>
+            <div class="load-wallet">
+                <h1>Credit Account</h1>
+                <form class="credit" action="#" method="post">
+                    <div class="devise">
+                        <select name="devise" id="devise">
+                        <option value="yen" selected>¥</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="amount">
+                        <input type="number" name="amount" id="amount" min="1" placeholder="Insert amount...">
+                    </div>
+                    <button type="submit"><img src="icons/arrow.png" alt="Arrow icon"></button>
+                </form>
+            </div>
+            <div class="warning-wallet">
+                <img src="icons/cancel.png" alt="warning image">
+                <p>
+                    As this site is a school project, you don't need to enter a credit card to credit your account, and no amount will be deducted from your account. All sums of money mentioned on the site are not real sums.
+                </p>
+            </div>
+        </main>
+
+        <footer>
+            © 2025 Japan Tour. All rights reserved.
+            <br>
+            Tours, images, and content may not be reproduced without permission.
+            <img src="icons/logo.png">
+        </footer>
+
+
+        
+    </body>
+</html>
