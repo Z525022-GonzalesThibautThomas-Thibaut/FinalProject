@@ -39,7 +39,7 @@ else {
                 <img src="icons/logo.png" alt="Logo de JapanTour">
             </a>
             
-            <form class="navbar-search-bar" action="" method="get">
+            <form class="navbar-search-bar" action="search.php" method="get">
                 <div class="select-city">
                     <label for="city">City</label>
                     <select name="city" id="city">
