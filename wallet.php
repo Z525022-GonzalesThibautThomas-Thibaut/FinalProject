@@ -17,6 +17,16 @@
         $user = $statement->fetch(PDO::FETCH_ASSOC);
         $balance = $user['balance'];
     }
+    $city = $_GET['city'] ?? '';
+
+if (!empty($city)) {
+    $stmt = $db->prepare("SELECT * FROM tour_list WHERE city = ?");
+    $stmt->execute([$city]);
+    $tours = $stmt->fetchAll();
+} 
+else {
+    $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,14 +49,17 @@
                 <img src="icons/logo.png" alt="Logo de JapanTour">
             </a>
             
-            <form class="navbar-search-bar" action="#" method="get">
+            <form class="navbar-search-bar" action="search.php" method="get">
                 <div class="select-city">
                     <label for="city">City</label>
                     <select name="city" id="city">
-                    <option value="" disabled selected hidden>Choose your city to explore...</option>
-                    <option value="tokyo">Tokyo</option>
-                    <option value="osaka">Osaka</option>
-                    <option value="kyoto">Kyoto</option>
+                    <option value="" disabled <?= empty($city) ? 'selected' : '' ?> hidden>Choose your city to explore...</option>
+                    <option value="tokyo" <?= $city == 'tokyo' ? 'selected' : '' ?>>Tokyo</option>
+                    <option value="osaka" <?= $city == 'osaka' ? 'selected' : '' ?>>Osaka</option>
+                    <option value="kyoto" <?= $city == 'kyoto' ? 'selected' : '' ?>>Kyoto</option>
+                    <option value="hokkaido" <?= $city == 'hokkaido' ? 'selected' : '' ?>>Hokkaido</option>
+                    <option value="okinawa" <?= $city == 'okinawa' ? 'selected' : '' ?>>Okinawa</option>
+
                     </select>
                 </div>
                 <hr>
@@ -74,6 +87,10 @@
                         <a href="logout.php">Log out</a>
                         <a href="reservations.php">My reservations</a>
                         <a href="wallet.php">My wallet</a>
+                        <a href="delete_account.php"
+                        onclick="return confirm('Are you sure you want to delete your account? This action is irreversible.');">
+                        Delete my account
+                        </a>
                         </div>
                     </div>
                 <?php else: ?>

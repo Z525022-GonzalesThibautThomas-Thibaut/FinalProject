@@ -1,17 +1,10 @@
 <?php 
 session_start();
 require_once('database.php');
-$user_id = $_SESSION['user_id'];
-$query = "
-    SELECT r.*, t.tour_name AS tour_name, t.description, t.image_url, t.city
-    FROM reservation r
-    JOIN tour_list t ON r.tour_id = t.tour_id
-    WHERE r.user_id = ?
-    ORDER BY r.reservation_date ASC
-";
-$statement = $db->prepare($query);
-$statement->execute([$user_id]);
-$reservations = $statement->fetchAll(PDO::FETCH_ASSOC);
+$tour_id = $_GET['tour_id'];
+$statement = $db->prepare("SELECT * FROM tour_list WHERE tour_id = ?");
+$statement->execute([$tour_id]);
+$tour = $statement->fetch();
 $city = $_GET['city'] ?? '';
 
 if (!empty($city)) {
@@ -23,6 +16,7 @@ else {
     $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
 }
 ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,9 +27,10 @@ else {
         <link rel="stylesheet" href="styles/overall.css">
         <link rel="stylesheet" href="styles/navbar.css">
         <link rel="stylesheet" href="styles/footer.css">
-        <link rel="stylesheet" href="styles/reservations.css">
+        <link rel="stylesheet" href="styles/tour.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
         <script src="scripts/overall.js" defer></script>
+        <script src="scripts/tour.js" defer></script>
         <title>JapanTour</title>
     </head>
     <body>
@@ -54,7 +49,6 @@ else {
                     <option value="kyoto" <?= $city == 'kyoto' ? 'selected' : '' ?>>Kyoto</option>
                     <option value="hokkaido" <?= $city == 'hokkaido' ? 'selected' : '' ?>>Hokkaido</option>
                     <option value="okinawa" <?= $city == 'okinawa' ? 'selected' : '' ?>>Okinawa</option>
-
                     </select>
                 </div>
                 <hr>
@@ -86,7 +80,6 @@ else {
                         onclick="return confirm('Are you sure you want to delete your account? This action is irreversible.');">
                         Delete my account
                         </a>
-
                         </div>
                     </div>
                 <?php else: ?>
@@ -100,45 +93,72 @@ else {
             </div>
         </nav>
 
+
         <main>
-            <h1>My upcoming city tours...</h1>
-            <div class="cards">
-                <?php if (empty($reservations)): ?>
-                    <p>You have no upcoming reservations.</p>
-                <?php else: ?>
-                    <?php foreach ($reservations as $reservation): ?>
-                        <div class="card">
-                            <div class="image" style ="background-image: url('<?=$reservation['image_url']?>');"></div>
-                                <div class="informations">
-                                    <h2><?php echo $reservation['tour_name']?></h2>
-                                    <div class="tour-city">
-                                        <div class="city-icon"><img src="icons/city-svgrepo-com.png" alt="city icon"></div>
-                                        <?php echo $reservation['city']?>
-                                    </div>
-                                    <div class="tour-guests">
-                                        <div class="guests-icon"><img src="icons/people.png" alt="guests icon"></div>
-                                        <?php echo (int)$reservation['number_of_guests']?> Guests
-                                    </div>
-                                    <div class="tour-date">
-                                        <div class="date-icon"><img src="icons/clock.png" alt="clock icon"></div>
-                                        <?php 
-                                            $date = new DateTime($reservation['reservation_date']);
-                                            echo $date->format('y/m/d');
-                                        ?>
-                                    </div>
-                                    <div class="links">
-                                        <a href="tour.php?tour_id=<?= $reservation['tour_id'] ?>">
-                                            <div class="tour-page">City Tour Page</div>
-                                        </a>
-                                        <a href="cancel_reservation.php?reservation_id=<?php echo $reservation['reservation_id'];?>"
-                                        onclick = "return confirm('Are you sure you want to cancel this reservation ?');" >
-                                            <div class="tour-cancel">Cancel</div>
-                                        </a>
-                                    </div>
-                                </div>
+            <div class="tour-header" style ="background-image: url('<?=$tour['image_url']?>');"></div>
+
+            <div class="informations-reservation">
+                <div class="informations">
+                    <h1><?= $tour['tour_name']?></h1>
+                    <div class="city">
+                        <div class="city-icon">
+                            <img src="icons/city-svgrepo-com.png" alt="city icon">
                         </div>
-                    <?php endforeach;?>
-                <?php endif; ?>
+                        <?= $tour['city']?>
+                    </div>
+                    <div class="people">
+                        <div class="people-icon">
+                            <img src="icons/people.png" alt="people icon">
+                        </div>
+                        Maximum <?= $tour['available_seats']?> people
+                    </div>
+                    
+                </div>
+                <div class="reservation">
+                    <div class="unit-price">
+                        ¥<?=number_format($tour['price_yen'],0,'',' ') ?>
+                        <span class="little">per guest</span>
+                    </div>
+                    <?php if (isset($_SESSION['error'])): ?>
+                        <div class="message-area" style="color: red; font-weight: bold; margin-bottom: 10px;">
+                            <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form class="reservation-bar" action="reserve.php" method="post">
+                        <input type ="hidden" name ="tour_id" value ="<?= $tour['tour_id']?>">
+                        <input type ="hidden" name ="unit_price" value ="<?= $tour['price_yen']?>">
+                        <div class="date">
+                            <label for="tour-date">Date</label>
+                            <input type="text" id="tour-date" name="date" placeholder="When?" required>
+                        </div>
+                        <hr>
+                        <div class="guest">
+                            <label for="tour-guests">Guests</label>
+                            <input type="number" name="guests" id="tour-guests" min="1" placeholder="Who?" required>
+                        </div>
+                        <div class="total-price">
+                        <span class="price-label">Price</span>
+                        <span class="calculated-price" id="price_display">¥0</span>
+                    </div>
+                        <button type="submit">Book</button>
+                    
+                    
+                </form>
+                    
+                </div>
+            </div>
+
+            <div class="description-warning">
+                <div class="description">
+                    <h3>Description</h3>
+                    <p><?= $tour['description']?>
+                    </p>
+                </div>
+                <div class="warning">
+                    <img src="icons/cancel.png">
+                    <p>Free cancellation up to 48 hours before the tour</p>
+                </div>
             </div>
         </main>
 

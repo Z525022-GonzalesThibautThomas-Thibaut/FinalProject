@@ -1,17 +1,6 @@
-<?php 
-session_start();
+<?php
 require_once('database.php');
-$user_id = $_SESSION['user_id'];
-$query = "
-    SELECT r.*, t.tour_name AS tour_name, t.description, t.image_url, t.city
-    FROM reservation r
-    JOIN tour_list t ON r.tour_id = t.tour_id
-    WHERE r.user_id = ?
-    ORDER BY r.reservation_date ASC
-";
-$statement = $db->prepare($query);
-$statement->execute([$user_id]);
-$reservations = $statement->fetchAll(PDO::FETCH_ASSOC);
+
 $city = $_GET['city'] ?? '';
 
 if (!empty($city)) {
@@ -23,6 +12,8 @@ else {
     $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
 }
 ?>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,7 +24,7 @@ else {
         <link rel="stylesheet" href="styles/overall.css">
         <link rel="stylesheet" href="styles/navbar.css">
         <link rel="stylesheet" href="styles/footer.css">
-        <link rel="stylesheet" href="styles/reservations.css">
+        <link rel="stylesheet" href="styles/search.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
         <script src="scripts/overall.js" defer></script>
         <title>JapanTour</title>
@@ -48,6 +39,7 @@ else {
                 <div class="select-city">
                     <label for="city">City</label>
                     <select name="city" id="city">
+                    <option value="" disabled selected hidden>Choose your city to explore...</option>
                     <option value="" disabled <?= empty($city) ? 'selected' : '' ?> hidden>Choose your city to explore...</option>
                     <option value="tokyo" <?= $city == 'tokyo' ? 'selected' : '' ?>>Tokyo</option>
                     <option value="osaka" <?= $city == 'osaka' ? 'selected' : '' ?>>Osaka</option>
@@ -86,7 +78,6 @@ else {
                         onclick="return confirm('Are you sure you want to delete your account? This action is irreversible.');">
                         Delete my account
                         </a>
-
                         </div>
                     </div>
                 <?php else: ?>
@@ -101,44 +92,31 @@ else {
         </nav>
 
         <main>
-            <h1>My upcoming city tours...</h1>
+            <h1>Available city tours...</h1>
             <div class="cards">
-                <?php if (empty($reservations)): ?>
-                    <p>You have no upcoming reservations.</p>
-                <?php else: ?>
-                    <?php foreach ($reservations as $reservation): ?>
-                        <div class="card">
-                            <div class="image" style ="background-image: url('<?=$reservation['image_url']?>');"></div>
-                                <div class="informations">
-                                    <h2><?php echo $reservation['tour_name']?></h2>
-                                    <div class="tour-city">
-                                        <div class="city-icon"><img src="icons/city-svgrepo-com.png" alt="city icon"></div>
-                                        <?php echo $reservation['city']?>
-                                    </div>
-                                    <div class="tour-guests">
-                                        <div class="guests-icon"><img src="icons/people.png" alt="guests icon"></div>
-                                        <?php echo (int)$reservation['number_of_guests']?> Guests
-                                    </div>
-                                    <div class="tour-date">
-                                        <div class="date-icon"><img src="icons/clock.png" alt="clock icon"></div>
-                                        <?php 
-                                            $date = new DateTime($reservation['reservation_date']);
-                                            echo $date->format('y/m/d');
-                                        ?>
-                                    </div>
-                                    <div class="links">
-                                        <a href="tour.php?tour_id=<?= $reservation['tour_id'] ?>">
-                                            <div class="tour-page">City Tour Page</div>
-                                        </a>
-                                        <a href="cancel_reservation.php?reservation_id=<?php echo $reservation['reservation_id'];?>"
-                                        onclick = "return confirm('Are you sure you want to cancel this reservation ?');" >
-                                            <div class="tour-cancel">Cancel</div>
-                                        </a>
-                                    </div>
-                                </div>
+                <?php foreach ($tours as $tour): ?>
+                    <div class="card">
+                        <div class="image" style ="background-image: url('<?=$tour['image_url']?>');">
+                            <!--<img src="<?= $tour['image_url'] ?>" alt="Tour image">-->
                         </div>
-                    <?php endforeach;?>
-                <?php endif; ?>
+                        <div class="informations">
+                            <h2><?= $tour['tour_name'] ?></h2>
+                            <div class="tour-city">
+                                <div class="city-icon"><img src="icons/city-svgrepo-com.png" alt="city icon"></div>
+                                <?= $tour['city'] ?>
+                            </div>
+                            <div class="tour-guests">
+                                <div class="guests-icon"><img src="icons/people.png" alt="guests icon"></div>
+                                Max <?= $tour['available_seats'] ?> guests
+                            </div>
+                            <div class="links">
+                                <a href="tour.php?tour_id=<?= $tour['tour_id'] ?>">
+                                    <div class="tour-page">City Tour Page</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </main>
 

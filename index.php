@@ -1,6 +1,17 @@
 <?php
 session_start();
 require_once('database.php');
+$tours = $db->query("SELECT * from tour_list")->fetchAll();
+$city = $_GET['city'] ?? '';
+
+if (!empty($city)) {
+    $stmt = $db->prepare("SELECT * FROM tour_list WHERE city = ?");
+    $stmt->execute([$city]);
+    $tours = $stmt->fetchAll();
+} 
+else {
+    $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
+}
 ?>
 
 
@@ -26,14 +37,17 @@ require_once('database.php');
                 <img src="icons/logo.png" alt="Logo de JapanTour">
             </a>
             
-            <form class="navbar-search-bar" action="#" method="get">
+            <form class="navbar-search-bar" action="search.php" method="get">
                 <div class="select-city">
                     <label for="city">City</label>
                     <select name="city" id="city">
-                    <option value="" disabled selected hidden>Choose your city to explore...</option>
-                    <option value="tokyo">Tokyo</option>
-                    <option value="osaka">Osaka</option>
-                    <option value="kyoto">Kyoto</option>
+                    <option value="" disabled <?= empty($city) ? 'selected' : '' ?> hidden>Choose your city to explore...</option>
+                    <option value="tokyo" <?= $city == 'tokyo' ? 'selected' : '' ?>>Tokyo</option>
+                    <option value="osaka" <?= $city == 'osaka' ? 'selected' : '' ?>>Osaka</option>
+                    <option value="kyoto" <?= $city == 'kyoto' ? 'selected' : '' ?>>Kyoto</option>
+                    <option value="hokkaido" <?= $city == 'hokkaido' ? 'selected' : '' ?>>Hokkaido</option>
+                    <option value="okinawa" <?= $city == 'okinawa' ? 'selected' : '' ?>>Okinawa</option>
+
                     </select>
                 </div>
                 <hr>
@@ -61,6 +75,10 @@ require_once('database.php');
                         <a href="logout.php">Log out</a>
                         <a href="reservations.php">My reservations</a>
                         <a href="wallet.php">My wallet</a>
+                        <a href="delete_account.php"
+                        onclick="return confirm('Are you sure you want to delete your account? This action is irreversible.');">
+                        Delete my account
+                        </a>
                         </div>
                     </div>
                 <?php else: ?>
@@ -87,160 +105,39 @@ require_once('database.php');
                 <p>Choose from dozens of city tours!</p>
                 <div class="city-tours-cards">
                     <div class="city-tours-cards-track">
+                        <?php
+                            $tour_sets = array_chunk($tours,3);
+                            foreach($tour_sets as $set):
+                        ?>
                         <div class="city-tours-cards-set">
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/asakusa.jpg" alt="asakusa image">
-                                    <h3>Asakusa & Skytree</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
+                            <?php foreach($set as $tour):?>
+                                <a href="tour.php?tour_id=<?=$tour['tour_id']?>">
+                                    <div class="city-tour-card">
+                                        <img src="<?=$tour['image_url']?>" alt="<?=$tour['tour_name']?> image">
+                                        <h3><?=$tour['tour_name']?></h3>
+                                        <div class="city">
+                                            <div class="city-icon">
+                                                <img src="icons/city-svgrepo-com.png" alt="city icon">
+                                            </div>
+                                            <?=$tour['city']?>
                                         </div>
-                                        Tokyo
-                                    </div>
-                                    <div class="price">
-                                        ¥23 000
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/bamboo_kyoto.jpg" alt="bamboo kyoto image">
-                                    <h3>Arashiyama bamboo forest</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
+                                        <div class="price">
+                                            ¥<?=number_format($tour['price_yen'],0,'',' ') ?>
                                         </div>
-                                        Kyoto
                                     </div>
-                                    <div class="price">
-                                        ¥40 000
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/osaka.jpg" alt="osaka castle image">
-                                    <h3>Osaka Castle & Park</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
-                                        </div>
-                                        Osaka
-                                    </div>
-                                    <div class="price">
-                                        ¥6 000
-                                    </div>
-                                </div>
-                            </a>
+                                </a>
+                            <?php endforeach; ?>
                         </div>
-
-                        <div class="city-tours-cards-set">
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/asakusa.jpg" alt="asakusa image">
-                                    <h3>Asakusa & Skytree</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
-                                        </div>
-                                        Tokyo
-                                    </div>
-                                    <div class="price">
-                                        ¥23 000
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/asakusa.jpg" alt="asakusa image">
-                                    <h3>Asakusa & Skytree</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
-                                        </div>
-                                        Tokyo
-                                    </div>
-                                    <div class="price">
-                                        ¥23 000
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/osaka.jpg" alt="osaka castle image">
-                                    <h3>Osaka Castle & Park</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
-                                        </div>
-                                        Osaka
-                                    </div>
-                                    <div class="price">
-                                        ¥6 000
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="city-tours-cards-set">
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/asakusa.jpg" alt="asakusa image">
-                                    <h3>Asakusa & Skytree</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
-                                        </div>
-                                        Tokyo
-                                    </div>
-                                    <div class="price">
-                                        ¥23 000
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/bamboo_kyoto.jpg" alt="bamboo kyoto image">
-                                    <h3>Arashiyama bamboo forest</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
-                                        </div>
-                                        Kyoto
-                                    </div>
-                                    <div class="price">
-                                        ¥40 000
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="city-tour-card">
-                                    <img src="images/asakusa.jpg" alt="asakusa image">
-                                    <h3>Asakusa & Skytree</h3>
-                                    <div class="city">
-                                        <div class="city-icon">
-                                            <img src="icons/city-svgrepo-com.png" alt="city icon">
-                                        </div>
-                                        Tokyo
-                                    </div>
-                                    <div class="price">
-                                        ¥23 000
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                    <?php endforeach; ?>
+                    <div class="cards-nav">
+                        <button class="prev">
+                            <img src="icons/previous.png">
+                        </button>
+                        <span class="indicator">1 / 3</span>
+                        <button class="next">
+                            <img src="icons/next.png">
+                        </button>
                     </div>
-                </div>
-                <div class="cards-nav">
-                    <button class="prev">
-                        <img src="icons/previous.png">
-                    </button>
-                    <span class="indicator">1 / 3</span>
-                    <button class="next">
-                        <img src="icons/next.png">
-                    </button>
-                </div>
             </div>
 
             <div class="informations">
