@@ -1,6 +1,7 @@
 <?php 
 session_start();
 require_once('database.php');
+require('nav_bar.php');
 $user_id = $_SESSION['user_id'];
 $query = "
     SELECT r.*, t.tour_name AS tour_name, t.description, t.image_url, t.city
@@ -12,16 +13,7 @@ $query = "
 $statement = $db->prepare($query);
 $statement->execute([$user_id]);
 $reservations = $statement->fetchAll(PDO::FETCH_ASSOC);
-$city = $_GET['city'] ?? '';
 
-if (!empty($city)) {
-    $stmt = $db->prepare("SELECT * FROM tour_list WHERE city = ?");
-    $stmt->execute([$city]);
-    $tours = $stmt->fetchAll();
-} 
-else {
-    $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,7 +36,7 @@ else {
                 <img src="icons/logo.png" alt="Logo de JapanTour">
             </a>
             
-            <form class="navbar-search-bar" action="" method="get">
+            <form class="navbar-search-bar" action="search.php" method="get">
                 <div class="select-city">
                     <label for="city">City</label>
                     <select name="city" id="city">
@@ -72,10 +64,6 @@ else {
             </form>
             <div class="user-options">
                 <?php if(isset($_SESSION['user_id'])):?>
-                    <div class="log-in">
-                        <img src="icons/user.png" alt="User icon">
-                        <?php echo $_SESSION['username'];?>
-                    </div>
                     <div class="dropdown-menu">
                         <button id="dropdown-button"><img src="icons/menu.png" alt="Menu icon"></button>
                         <div id="dropdown-content" class="dropdown-content">
@@ -101,14 +89,18 @@ else {
         </nav>
 
         <main>
-            <h1>My upcoming city tours...</h1>
-            <div class="cards">
+            <h1>
                 <?php if (empty($reservations)): ?>
-                    <p>You have no upcoming reservations.</p>
+                    You have no upcoming reservations...
                 <?php else: ?>
+                    My upcoming city tours...
+                <?php endif;?>
+            </h1>
+            <div class="cards">
+                
                     <?php foreach ($reservations as $reservation): ?>
                         <div class="card">
-                            <div class="image" style ="background-image: url('<?=$reservation['image_url']?>');"></div>
+                            <div class="image" style ="background-image: url('images/<?=$reservation['image_url']?>');"></div>
                                 <div class="informations">
                                     <h2><?php echo $reservation['tour_name']?></h2>
                                     <div class="tour-city">
@@ -138,7 +130,6 @@ else {
                                 </div>
                         </div>
                     <?php endforeach;?>
-                <?php endif; ?>
             </div>
         </main>
 

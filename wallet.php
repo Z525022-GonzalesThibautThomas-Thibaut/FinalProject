@@ -1,6 +1,7 @@
 <?php 
     session_start();
     require_once('database.php');
+    require('nav_bar.php');
     $user_id = $_SESSION['user_id'];
     $statement = $db->prepare("SELECT balance FROM user WHERE user_id = ?");
     $statement->execute([$user_id]);
@@ -17,16 +18,7 @@
         $user = $statement->fetch(PDO::FETCH_ASSOC);
         $balance = $user['balance'];
     }
-    $city = $_GET['city'] ?? '';
 
-if (!empty($city)) {
-    $stmt = $db->prepare("SELECT * FROM tour_list WHERE city = ?");
-    $stmt->execute([$city]);
-    $tours = $stmt->fetchAll();
-} 
-else {
-    $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -77,10 +69,6 @@ else {
             </form>
             <div class="user-options">
                 <?php if(isset($_SESSION['user_id'])):?>
-                    <div class="log-in">
-                        <img src="icons/user.png" alt="User icon">
-                        <?php echo $_SESSION['username'];?>
-                    </div>
                     <div class="dropdown-menu">
                         <button id="dropdown-button"><img src="icons/menu.png" alt="Menu icon"></button>
                         <div id="dropdown-content" class="dropdown-content">

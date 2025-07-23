@@ -1,16 +1,7 @@
 <?php
+session_start();
 require_once('database.php');
-
-$city = $_GET['city'] ?? '';
-
-if (!empty($city)) {
-    $stmt = $db->prepare("SELECT * FROM tour_list WHERE city = ?");
-    $stmt->execute([$city]);
-    $tours = $stmt->fetchAll();
-} 
-else {
-    $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
-}
+require ('nav_bar.php');
 ?>
 
 
@@ -64,10 +55,6 @@ else {
             </form>
             <div class="user-options">
                 <?php if(isset($_SESSION['user_id'])):?>
-                    <div class="log-in">
-                        <img src="icons/user.png" alt="User icon">
-                        <?php echo $_SESSION['username'];?>
-                    </div>
                     <div class="dropdown-menu">
                         <button id="dropdown-button"><img src="icons/menu.png" alt="Menu icon"></button>
                         <div id="dropdown-content" class="dropdown-content">
@@ -96,7 +83,7 @@ else {
             <div class="cards">
                 <?php foreach ($tours as $tour): ?>
                     <div class="card">
-                        <div class="image" style ="background-image: url('<?=$tour['image_url']?>');">
+                        <div class="image" style ="background-image: url('images/<?=$tour['image_url']?>');">
                             <!--<img src="<?= $tour['image_url'] ?>" alt="Tour image">-->
                         </div>
                         <div class="informations">

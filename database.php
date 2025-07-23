@@ -1,7 +1,7 @@
 <?php
-    $dsn = 'mysql:host=localhost;dbname=group4';//host a changer quand ce sera sur le réseau de l'école
-    $username = 'root';
-    $password = '';
+    $dsn = 'mysql:host=172.21.82.208;dbname=GROUP4';//host a changer quand ce sera sur le réseau de l'école
+    $username = 'GROUP4';
+    $password = '479';
     try {
         $db = new PDO($dsn, $username, $password);
         //echo"<p>Connected to database:</p>";

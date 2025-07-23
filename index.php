@@ -1,17 +1,7 @@
 <?php
 session_start();
 require_once('database.php');
-$tours = $db->query("SELECT * from tour_list")->fetchAll();
-$city = $_GET['city'] ?? '';
-
-if (!empty($city)) {
-    $stmt = $db->prepare("SELECT * FROM tour_list WHERE city = ?");
-    $stmt->execute([$city]);
-    $tours = $stmt->fetchAll();
-} 
-else {
-    $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
-}
+require ('nav_bar.php');
 ?>
 
 
@@ -65,10 +55,6 @@ else {
             </form>
             <div class="user-options">
                 <?php if(isset($_SESSION['user_id'])):?>
-                    <div class="log-in">
-                        <img src="icons/user.png" alt="User icon">
-                        <?php echo $_SESSION['username'];?>
-                    </div>
                     <div class="dropdown-menu">
                         <button id="dropdown-button"><img src="icons/menu.png" alt="Menu icon"></button>
                         <div id="dropdown-content" class="dropdown-content">
@@ -113,7 +99,7 @@ else {
                             <?php foreach($set as $tour):?>
                                 <a href="tour.php?tour_id=<?=$tour['tour_id']?>">
                                     <div class="city-tour-card">
-                                        <img src="<?=$tour['image_url']?>" alt="<?=$tour['tour_name']?> image">
+                                        <img src="images/<?=$tour['image_url']?>" alt="<?=$tour['tour_name']?> image">
                                         <h3><?=$tour['tour_name']?></h3>
                                         <div class="city">
                                             <div class="city-icon">
@@ -129,6 +115,7 @@ else {
                             <?php endforeach; ?>
                         </div>
                     <?php endforeach; ?>
+                    </div>
                     <div class="cards-nav">
                         <button class="prev">
                             <img src="icons/previous.png">
@@ -137,7 +124,8 @@ else {
                         <button class="next">
                             <img src="icons/next.png">
                         </button>
-                    </div>
+                    </div>  
+                </div>
             </div>
 
             <div class="informations">

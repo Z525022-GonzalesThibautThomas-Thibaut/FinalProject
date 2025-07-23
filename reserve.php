@@ -3,6 +3,10 @@ session_start();
 require_once('database.php');
 if($_SERVER['REQUEST_METHOD']==='POST'){
     $user_id =$_SESSION['user_id'];
+    if($user_id == null){
+        header("Location: login.php");
+        exit();
+    }
     $tour_id = $_POST['tour_id'];
     $date = $_POST['date'];
     $guests = (int)$_POST['guests'];
@@ -17,6 +21,25 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         header("Location: tour.php?tour_id=" . $tour_id);
         exit();
     }
+
+    $stmtPlacesGlobal = $db->prepare("SELECT available_seats FROM tour_list WHERE tour_id = ?");
+    $stmtPlacesGlobal->execute([$tour_id]);
+    $PlacesGlobal = $stmtPlacesGlobal->fetch();
+    $ValuePlacesGlobal = (int)$PlacesGlobal['available_seats'];
+
+    $stmtPlacesTaken = $db->prepare("SELECT SUM(number_of_guests) AS taken_seats FROM reservation WHERE reservation_date = ?");
+    $stmtPlacesTaken->execute([$date]);
+    $PlacesTaken = $stmtPlacesTaken->fetch();
+    $ValuePlacesTaken = (int)$PlacesTaken['taken_seats'] ?? 0;
+
+    if ($ValuePlacesGlobal - $ValuePlacesTaken < $guests){
+        $_SESSION['error'] = " There are not enough places left for this date...";
+        header("Location: tour.php?tour_id=" . $tour_id);
+        exit();
+    }
+
+
+
     $statement = $db->prepare("INSERT INTO reservation (tour_id, user_id, reservation_date, number_of_guests,total_price_yen)
                                 VALUES(?,?,?,?,?)");
     $statement->execute([$tour_id,$user_id,$date,$guests,$total_price]);

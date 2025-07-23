@@ -1,20 +1,11 @@
 <?php 
 session_start();
 require_once('database.php');
+require ('nav_bar.php');
 $tour_id = $_GET['tour_id'];
 $statement = $db->prepare("SELECT * FROM tour_list WHERE tour_id = ?");
 $statement->execute([$tour_id]);
 $tour = $statement->fetch();
-$city = $_GET['city'] ?? '';
-
-if (!empty($city)) {
-    $stmt = $db->prepare("SELECT * FROM tour_list WHERE city = ?");
-    $stmt->execute([$city]);
-    $tours = $stmt->fetchAll();
-} 
-else {
-    $tours = $db->query("SELECT * FROM tour_list")->fetchAll();
-}
 ?>
 
 <!DOCTYPE html>
@@ -66,10 +57,6 @@ else {
             </form>
             <div class="user-options">
                 <?php if(isset($_SESSION['user_id'])):?>
-                    <div class="log-in">
-                        <img src="icons/user.png" alt="User icon">
-                        <?php echo $_SESSION['username'];?>
-                    </div>
                     <div class="dropdown-menu">
                         <button id="dropdown-button"><img src="icons/menu.png" alt="Menu icon"></button>
                         <div id="dropdown-content" class="dropdown-content">
@@ -95,7 +82,7 @@ else {
 
 
         <main>
-            <div class="tour-header" style ="background-image: url('<?=$tour['image_url']?>');"></div>
+            <div class="tour-header" style ="background-image:linear-gradient(to bottom, transparent 80%, var(--soft-grey) 100%), url('images/<?=$tour['image_url']?>');"></div>
 
             <div class="informations-reservation">
                 <div class="informations">
@@ -120,32 +107,31 @@ else {
                         <span class="little">per guest</span>
                     </div>
                     <?php if (isset($_SESSION['error'])): ?>
-                        <div class="message-area" style="color: red; font-weight: bold; margin-bottom: 10px;">
+                        <div class="message-area" style="color: red; font-weight: bold; margin-bottom: 10px; width:100%; text-align: center;">
                             <?= $_SESSION['error']; unset($_SESSION['error']); ?>
                         </div>
                     <?php endif; ?>
 
-                    <form class="reservation-bar" action="reserve.php" method="post">
-                        <input type ="hidden" name ="tour_id" value ="<?= $tour['tour_id']?>">
-                        <input type ="hidden" name ="unit_price" value ="<?= $tour['price_yen']?>">
-                        <div class="date">
-                            <label for="tour-date">Date</label>
-                            <input type="text" id="tour-date" name="date" placeholder="When?" required>
-                        </div>
-                        <hr>
-                        <div class="guest">
-                            <label for="tour-guests">Guests</label>
-                            <input type="number" name="guests" id="tour-guests" min="1" placeholder="Who?" required>
+                    <form action="reserve.php" method="post">
+                        <div class="reservation-bar">
+                            <input type ="hidden" name ="tour_id" value ="<?= $tour['tour_id']?>">
+                            <input type ="hidden" name ="unit_price" value ="<?= $tour['price_yen']?>">
+                            <div class="date">
+                                <label for="tour-date">Date</label>
+                                <input type="text" id="tour-date" name="date" placeholder="When?" value="" required data-input>
+                            </div>
+                            <hr>
+                            <div class="guest">
+                                <label for="tour-guests">Guests</label>
+                                <input type="number" name="guests" id="tour-guests" min="1" placeholder="Who?" required>
+                            </div>
                         </div>
                         <div class="total-price">
-                        <span class="price-label">Price</span>
-                        <span class="calculated-price" id="price_display">¥0</span>
-                    </div>
+                            <span class="price-label">Price</span>
+                            <span class="calculated-price" id="price_display">¥0</span>
+                        </div>
                         <button type="submit">Book</button>
-                    
-                    
-                </form>
-                    
+                    </form>
                 </div>
             </div>
 
