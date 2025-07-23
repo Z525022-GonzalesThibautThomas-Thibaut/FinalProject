@@ -227,7 +227,6 @@ input[type=number] {
         display: flex;
         justify-content: center;
         align-items: center;
-        display: none;
     }
     .log-in img{
         padding-right: 0px;
