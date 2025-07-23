@@ -12,6 +12,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
     $tour_id = sanitize_input($_POST['tour_id']);
     $date = sanitize_input($_POST['date']);
+    $today = date('Y-m-d');
+    if ($date < $today) {
+        $_SESSION['error'] = "You can't make a reservation on a passed date.";
+        header("Location: tour.php?tour_id=" . $tour_id);
+        exit();
+    }
     $guests = (int)sanitize_input($_POST['guests']);
     $unit_price= (int)sanitize_input($_POST['unit_price']);
     $total_price = $unit_price * $guests;

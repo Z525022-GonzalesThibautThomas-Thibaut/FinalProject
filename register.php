@@ -107,5 +107,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
               </form>
               
         </div>
+        <script>
+        document.querySelector("form").addEventListener("submit", function(e) {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+
+            if (!passwordRegex.test(password)) {
+                alert("Password must contain at least 6 characters, one uppercase letter, and one number.");
+                e.preventDefault();
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                e.preventDefault();
+            }
+        });
+        </script>
     </body>
 </html>
