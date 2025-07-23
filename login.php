@@ -7,9 +7,12 @@ if(isset($_SESSION['success_message'])){
     $success_message = $_SESSION['success_message'];
     unset($_SESSION['success_message']);
 }
+function sanitize_input($data){
+    return htmlspecialchars((stripslashes(trim($data))));
+}
 if($_SERVER['REQUEST_METHOD']==='POST'){
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = sanitize_input($_POST['email']);
+    $password = sanitize_input($_POST['password']);
 
     $statement = $db->prepare("SELECT * FROM user where email =?");
     $statement->execute([$email]);

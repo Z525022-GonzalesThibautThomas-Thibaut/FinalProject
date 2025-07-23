@@ -1,7 +1,10 @@
 <?php
-    $city = $_GET['city'] ?? '';
-    $date = $_GET['date'] ?? '';
-    $guests = $_GET['guests'] ?? '';
+function sanitize_input($data){
+    return htmlspecialchars((stripslashes(trim($data))));
+}
+    $city = sanitize_input($_GET['city'] ?? '');
+    $date = sanitize_input($_GET['date'] ?? '');
+    $guests = sanitize_input($_GET['guests'] ?? '');
 
     if (!empty($city) && !empty($date) && !empty($guests)) {
         $stmt = $db->prepare("SELECT tl.*

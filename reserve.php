@@ -1,16 +1,19 @@
 <?php 
 session_start();
 require_once('database.php');
+function sanitize_input($data){
+    return htmlspecialchars((stripslashes(trim($data))));
+}
 if($_SERVER['REQUEST_METHOD']==='POST'){
     $user_id =$_SESSION['user_id'];
     if($user_id == null){
         header("Location: login.php");
         exit();
     }
-    $tour_id = $_POST['tour_id'];
-    $date = $_POST['date'];
-    $guests = (int)$_POST['guests'];
-    $unit_price= (int)$_POST['unit_price'];
+    $tour_id = sanitize_input($_POST['tour_id']);
+    $date = sanitize_input($_POST['date']);
+    $guests = (int)sanitize_input($_POST['guests']);
+    $unit_price= (int)sanitize_input($_POST['unit_price']);
     $total_price = $unit_price * $guests;
     $stmt = $db->prepare("SELECT balance FROM user WHERE user_id = ?");
     $stmt->execute([$user_id]);
