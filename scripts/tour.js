@@ -1,7 +1,7 @@
 /*Script date selector navbar*/
-console.log('tour.js loaded');
 flatpickr("#tour-date", {
-    dateFormat: "Y-m-d"
+    dateFormat: "Y-m-d",
+    allowInput: true
 });
 document.addEventListener('DOMContentLoaded', () => {
   const guestsInput = document.getElementById('tour-guests');
